@@ -1,58 +1,50 @@
-/* feedreader.js
- *
- * This is the spec file that Jasmine will read and contains
- * all of the tests that will be run against your application.
- */
-
 /* We're placing all of our tests within the $() function,
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
 $(function() {
-    /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
-    * feeds definitions, the allFeeds variable in our application.
-    */
+    /**
+     *Test suite to validate RSS feeds functionality
+     */
     describe('RSS Feeds', function() {
-        /* This is our first test - it tests to make sure that the
-         * allFeeds variable has been defined and that it is not
-         * empty. Experiment with this before you get started on
-         * the rest of this project. What happens when you change
-         * allFeeds in app.js to be an empty array and refresh the
-         * page?
+        /**
+         * Test to validate the all feeds array is defined
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
         });
 
-
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
+        /**
+         * Loop through the allFeeds array passing the object to test url exists function
          */
-
         for(var key in allFeeds){
             var obj = allFeeds[key];
            test_url_exists(obj);
         }
 
+        /**
+         * Function test url exists is called in the for loop and validates a url is defined.
+         * @param input
+         */
         function test_url_exists(input){
             it('should contain a url', function(){
                 expect(input.url).toBeDefined();
             });
         }
 
-
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
+        /**
+         * Loop through the allFeeds array passing the object to the test name exists function
          */
         for(var key in allFeeds){
             var obj = allFeeds[key];
             test_name_exists(obj);
         }
 
+        /**
+         * Function test name exists is called in the for loop that validates a name is defined
+         * @param input
+         */
         function test_name_exists(input){
             it('should contain a name', function(){
                 expect(input.name).toBeDefined();
@@ -61,16 +53,15 @@ $(function() {
                 expect(input.name).not.toBe('');
             });
         }
-
     });
 
-    /* TODO: Write a new test suite named "The menu" */
+    /**
+     * Test suite covering the menu of the rss feeder application
+     */
     describe('The menu', function(){
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
+        /**
+         * Using jQuery hasClass function, this test validates the menu is hidden when the page is loaded.
          */
         describe('when the page is first loaded', function(){
             it('should have menu-hidden present', function(){
@@ -78,11 +69,11 @@ $(function() {
             });
         });
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
+        /**
+         * Using Jasmine beforeEach method, this test is preforming a click event with
+         * jQuery's trigger method. The test is validating using jQuery's hasClass
+         * method that the CSS property menu-hidden has been removed.
+         */
          describe('when the menu icon is clicked',function(){
              beforeEach(function(){
                  $('.icon-list').trigger('click');
@@ -93,6 +84,13 @@ $(function() {
              });
          });
 
+        /**
+         * Using Jasmine beforeEach method, this test is preforming two click events.
+         * The first click is performed using jQuery's trigger method.
+         * A timeout is used to allow the DOM to render, then a second click event is made.
+         * The test then validates using jQuery's hasClass method that the CSS property menu-hidden
+         * has been removed.
+         */
          describe('when the menu icon is clicked twice', function(){
             beforeEach(function(){
                 $('.icon-list').trigger('click');
@@ -109,15 +107,16 @@ $(function() {
 
     });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /**
+     * Test suite covering the initial entries.
+     */
      describe('Initial Entries', function(){
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
+         /**
+          * The ajax function loadFeed is called with the first element in the allFeeds array.
+          * Once the callback is returned, the count of the list of feeds returned is determined
+          * using jQuery's find method to determine the length of the results.
+          */
          var results;
          beforeEach(function(done){
              loadFeed(0, function(){
@@ -126,19 +125,25 @@ $(function() {
              });
          });
 
+         /**
+          * Test to validate that the length of the results is greater than zero.
+          */
          it('should load the rss feed results', function(done){
            expect(results).toBeGreaterThan(0);
            done();
          });
      });
 
-    /* TODO: Write a new test suite named "New Feed Selection"*/
+    /**
+     * Test suite covering the new feed selection.
+     */
       describe('New Feed Selection', function(){
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+          /**
+           * Using jasmines async done() method, this test is loading two ajax callbacks and
+           * testing the title has changed between callbacks by using jQuery's element selector and text
+           * method to compare.
+           */
           var resultsOne;
           var resultsTwo;
 
@@ -151,11 +156,40 @@ $(function() {
                   });
               });
           });
-
+          /**
+           * Test to validate the titles changed between callbacks.
+           */
           it('should have different titles when menu option is selected', function(done){
               expect(resultsOne).not.toEqual(resultsTwo);
               done();
           });
-
       });
+
+    /**
+     * Test suite covering the default title is replaced after successful callback.
+     */
+      describe('Default Title',function(){
+          /**
+           * Using jQuery's element selector the default title is captured.
+           * Using jasmines async done() method, the loadFeed ajax feed is made
+           * and the title is then captured a second time.
+            */
+         var defaultTitle;
+         var afterLoadedTitle;
+         beforeEach(function(done){
+            defaultTitle = $('.header h1.header-title').text();
+             loadFeed(0, function(){
+                 afterLoadedTitle = $('.header h1.header-title').text();
+                 done();
+             });
+         });
+          /**
+           * Test to validate the default title is replace.
+           */
+          it('should be replaced on successful callback', function(){
+            expect(defaultTitle).not.toEqual(afterLoadedTitle);
+            done();
+          });
+      });
+
 }());
