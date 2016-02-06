@@ -110,6 +110,7 @@ $(function() {
     });
 
     /* TODO: Write a new test suite named "Initial Entries" */
+     describe('Initial Entries', function(){
 
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -118,7 +119,20 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
 
-    /* TODO: Write a new test suite named "New Feed Selection"
+         beforeEach(function(done){
+            loadFeed(0);
+            setTimeout(function(){
+                done();
+            },1000);
+         });
+
+         it('should load a rss feed', function(done){
+           expect( $('.feed').find('.entry-link').length ).toBeGreaterThan(0);
+           done();
+         });
+     });
+
+    /* TODO: Write a new test suite named "New Feed Selection"*/
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
