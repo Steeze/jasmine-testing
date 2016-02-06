@@ -186,7 +186,7 @@ $(function() {
           /**
            * Test to validate the default title is replace.
            */
-          it('should be replaced on successful callback', function(){
+          it('should be replaced on successful callback', function(done){
             expect(defaultTitle).not.toEqual(afterLoadedTitle);
             done();
           });

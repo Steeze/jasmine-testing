@@ -1,0 +1,28 @@
+{
+  "name": "jasmine-testing",
+  "version": "1.0.0",
+  "description": "test suit to cover a rss feeder",
+  "main": "index.html",
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-server-livereload": "^1.7.0",
+    "jshint": "^2.9.1"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Steeze/jasmine-testing.git"
+  },
+  "author": "Erich Schutz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Steeze/jasmine-testing/issues"
+  },
+  "homepage": "https://github.com/Steeze/jasmine-testing"
+}
