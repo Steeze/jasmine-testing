@@ -118,26 +118,44 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-
+         var results;
          beforeEach(function(done){
-            loadFeed(0);
-            setTimeout(function(){
-                done();
-            },1000);
+             loadFeed(0, function(){
+                 results = $('.feed').find('.entry-link').length;
+                 done();
+             });
          });
 
-         it('should load a rss feed', function(done){
-           expect( $('.feed').find('.entry-link').length ).toBeGreaterThan(0);
+         it('should load the rss feed results', function(done){
+           expect(results).toBeGreaterThan(0);
            done();
          });
      });
 
     /* TODO: Write a new test suite named "New Feed Selection"*/
+      describe('New Feed Selection', function(){
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+          var resultsOne;
+          var resultsTwo;
 
+          beforeEach(function(done){
+              loadFeed(0, function(){
+                  resultsOne = $('.header h1.header-title').text();
+                  loadFeed(1, function(){
+                      resultsTwo = $('.header h1.header-title').text();
+                      done();
+                  });
+              });
+          });
 
+          it('should have different titles when menu option is selected', function(done){
+              expect(resultsOne).not.toEqual(resultsTwo);
+              done();
+          });
+
+      });
 }());
