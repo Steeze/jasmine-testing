@@ -15,66 +15,58 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
+
         /**
          * Loop through the allFeeds array passing the object to test url exists function
-         */
-        for(var key in allFeeds){
-            var obj = allFeeds[key];
-           test_url_exists(obj);
-        }
-
-        /**
-         * Function test url exists is called in the for loop and validates a url is defined.
          * @param input
          */
-        function test_url_exists(input){
+
             it('should contain a url', function(){
-                expect(input.url).toBeDefined();
+                for(var key in allFeeds){
+                    var obj = allFeeds[key];
+                    test_url_exists(obj);
+                }
+
+                function test_url_exists(input){
+                    expect(input.url).toBeDefined();
+                    expect(input.url).toBeTruthy();
+                }
             });
-        }
 
         /**
-         * Loop through the allFeeds array passing the object to the test name exists function
-         */
-        for(var key in allFeeds){
-            var obj = allFeeds[key];
-            test_name_exists(obj);
-        }
-
-        /**
-         * Function test name exists is called in the for loop that validates a name is defined
+         * Function test name exists is called in the for loop that validates a name is defined and not empty
          * @param input
          */
-        function test_name_exists(input){
-            it('should contain a name', function(){
-                expect(input.name).toBeDefined();
+
+            it('should contain a name that is not empty', function(){
+                for(var key in allFeeds){
+                    var obj = allFeeds[key];
+                    test_name_exists(obj);
+                }
+                function test_name_exists(input){
+                    expect(input.name).toBeDefined();
+                    expect(input.name).not.toBe('');
+                }
+
             });
-            it('should have a name that is not empty', function(){
-                expect(input.name).not.toBe('');
-            });
-        }
     });
 
     /**
      * Test suite covering the menu of the rss feeder application
      */
     describe('The menu', function(){
-
         /**
          * Using jQuery hasClass function, this test validates the menu is hidden when the page is loaded.
          */
-        describe('when the page is first loaded', function(){
-            it('should have menu-hidden present', function(){
-                expect($("body").hasClass('menu-hidden')).toBe(true);
-            });
+        it('is hidden by default', function(){
+            expect($("body").hasClass('menu-hidden')).toBe(true);
         });
-
         /**
          * Using Jasmine beforeEach method, this test is preforming a click event with
          * jQuery's trigger method. The test is validating using jQuery's hasClass
          * method that the CSS property menu-hidden has been removed.
          */
-         describe('when the menu icon is clicked',function(){
+        describe('when the menu icon is clicked',function(){
              beforeEach(function(){
                  $('.icon-list').trigger('click');
              });
@@ -82,7 +74,7 @@ $(function() {
              it('should toggle the menu-hidden class ', function(){
                  return expect($('body').hasClass('menu-hidden')).toBe(false);
              });
-         });
+        });
 
         /**
          * Using Jasmine beforeEach method, this test is preforming two click events.
@@ -91,20 +83,15 @@ $(function() {
          * The test then validates using jQuery's hasClass method that the CSS property menu-hidden
          * has been removed.
          */
-         describe('when the menu icon is clicked twice', function(){
-            beforeEach(function(){
+        describe('when the menu icon is clicked twice', function() {
+            it('should toggle the menu being hidden and visible ', function () {
                 $('.icon-list').trigger('click');
+                expect($('body').hasClass('menu-hidden')).toBe(true);
 
-                setTimeout(function(){
-                    $('.icon-list').trigger('click');
-                }, 500);
-
+                $('.icon-list').trigger('click');
+                expect($('body').hasClass('menu-hidden')).toBe(false);
             });
-             it('should ', function(){
-                 return expect($('body').hasClass('menu-hidden')).toBe(true);
-             });
-         });
-
+        });
     });
 
     /**
@@ -128,9 +115,8 @@ $(function() {
          /**
           * Test to validate that the length of the results is greater than zero.
           */
-         it('should load the rss feed results', function(done){
+         it('should load the rss feed results', function(){
            expect(results).toBeGreaterThan(0);
-           done();
          });
      });
 
@@ -159,37 +145,8 @@ $(function() {
           /**
            * Test to validate the titles changed between callbacks.
            */
-          it('should have different titles when menu option is selected', function(done){
+          it('should have different titles when menu option is selected', function(){
               expect(resultsOne).not.toEqual(resultsTwo);
-              done();
           });
       });
-
-    /**
-     * Test suite covering the default title is replaced after successful callback.
-     */
-      describe('Default Title',function(){
-          /**
-           * Using jQuery's element selector the default title is captured.
-           * Using jasmines async done() method, the loadFeed ajax feed is made
-           * and the title is then captured a second time.
-            */
-         var defaultTitle;
-         var afterLoadedTitle;
-         beforeEach(function(done){
-            defaultTitle = $('.header h1.header-title').text();
-             loadFeed(0, function(){
-                 afterLoadedTitle = $('.header h1.header-title').text();
-                 done();
-             });
-         });
-          /**
-           * Test to validate the default title is replace.
-           */
-          it('should be replaced on successful callback', function(done){
-            expect(defaultTitle).not.toEqual(afterLoadedTitle);
-            done();
-          });
-      });
-
 }());
